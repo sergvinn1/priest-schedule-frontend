@@ -75,7 +75,7 @@ function HomePage() {
 
   return (
     <section id="schedule" className="schedule-section">
-      <h2>Поточний Розклад Чергувань</h2>
+      <h2>Поточний розклад</h2>
       <DateRangeSelector
         startDate={selectedStartDate}
         endDate={selectedEndDate}

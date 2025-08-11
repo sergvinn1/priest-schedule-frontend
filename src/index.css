@@ -12,8 +12,9 @@ body {
 }
 
 /* Загальний контейнер для центрування та обмеження ширини */
+/* Збільшив max-width, щоб точно було місце для 3-х колонок по 300px + gap */
 .container {
-  max-width: 1200px;
+  max-width: 1400px; /* Збільшено для кращого розміщення 3-х колонок */
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -130,41 +131,60 @@ section h2 {
   transform: translateY(0);
 }
 
-/* Відображення розкладу - ОНОВЛЕНО */
+/* Відображення розкладу */
 .schedule-display {
   min-height: 150px;
   display: grid; /* Використовуємо CSS Grid */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 2-3 картки в ряд */
+  /* Базові налаштування: 1 колонка. Буде перевизначено медіа-запитами */
+  grid-template-columns: 1fr;
   gap: 20px; /* Відступ між картками */
-  padding: 20px;
+  padding: 20px; /* Додайте внутрішній відступ */
   border: 1px dashed #c9d6df;
   border-radius: 8px;
   color: #667e98;
-  justify-content: center; /* Центрування вмісту по горизонталі, якщо карток менше, ніж колонок */
+  /* justify-content: center;  Це не зовсім те, що потрібно для центровки рядів */
+  align-items: start; /* Вирівнюємо елементи по верху, щоб картки не розтягувались */
+  
+  /* Нове правило для центровки рядів з меншою кількістю елементів */
+  /* justify-items: center;  Це центрирує кожен елемент всередині своєї клітинки */
+  /* place-items: center; Це скорочення для align-items і justify-items */
+  
+  /* Щоб центр елементів в рядку, коли їх менше ніж колонок, краще використовувати: */
+  /* Ця властивість керує вирівнюванням цілої сітки всередині її контейнера */
+  justify-content: center; /* Центрує весь вміст по горизонталі */
+  
 }
 
 /* Скидаємо flexbox властивості для повідомлення, якщо воно одне */
-.schedule-display p.loading-message {
+.schedule-display p.loading-message,
+.schedule-display p.no-schedule {
   grid-column: 1 / -1; /* Займає всю ширину сітки */
   text-align: center;
   align-self: center; /* Центруємо по вертикалі */
   margin: 0; /* Прибираємо зайві відступи */
   display: block; /* Забезпечуємо відображення як блочний елемент */
+  padding: 20px; /* Додайте внутрішній відступ */
+  color: #555; /* Трохи темніший колір для тексту повідомлення */
+  font-style: italic;
 }
-
 
 .schedule-entry {
   background-color: #f8fbfc;
   border: 1px solid #e0e6ed;
   border-radius: 8px;
   padding: 20px;
-  /* margin-bottom: 20px; - Цей відступ тепер не потрібен, бо є gap */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Збільшено тіні для акценту */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Додано тіні до transition */
+  display: flex; /* Використовуємо flexbox для внутрішнього вмісту картки */
+  flex-direction: column; /* Елементи стовпцем */
+  justify-content: space-between; /* Розтягує вміст по висоті */
+  height: 100%; /* Забезпечує однакову висоту карткам, якщо їх декілька у рядку grid-контейнера */
+  margin-bottom: 20px; /* Додано відступ знизу для візуального розділення рядів */
 }
 
 .schedule-entry:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Більш виразна тінь при наведенні */
 }
 
 .schedule-entry h3 {
@@ -174,27 +194,36 @@ section h2 {
   font-size: 1.5em;
   border-bottom: 1px solid #eef2f6;
   padding-bottom: 10px;
+  text-align: center; /* Центруємо дату */
 }
 
 .schedule-entry ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-grow: 1; /* Дозволяє списку займати весь доступний простір */
 }
 
 .schedule-entry li {
-  margin-bottom: 8px;
+  margin-bottom: 10px; /* Збільшено відступ між пунктами */
   font-size: 1.05em;
   color: #334e68;
+  display: flex; /* Розділяє роль і ім'я на одну лінію, але вирівнює їх */
+  align-items: baseline; /* Вирівнювання по базовій лінії тексту */
+  flex-wrap: wrap; /* Дозволяє переносити на новий рядок, якщо не вистачає місця */
+}
+
+.schedule-entry li:last-child {
+  margin-bottom: 0; /* Прибираємо нижній відступ для останнього елемента */
 }
 
 .schedule-entry .role {
   font-weight: bold;
   color: #1abc9c;
-  min-width: 160px;
-  display: inline-block;
+  min-width: 120px; /* Зменшено min-width, щоб більше поміщалося */
+  display: inline-block; /* Потрібно для min-width */
+  margin-right: 5px; /* Невеликий відступ від ролі до імені */
 }
-
 
 /* Footer */
 .main-footer {
@@ -210,6 +239,22 @@ section h2 {
 }
 
 /* Медіа-запити для адаптивності */
+
+/* Десктопні екрани (більше 1200px): 3 колонки */
+@media (min-width: 1200px) {
+  .schedule-display {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Планшети (від 769px до 1199px): 2 колонки */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .schedule-display {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Мобільні пристрої (до 768px): 1 колонка */
 @media (max-width: 768px) {
   .main-header h1 {
       font-size: 1.8em;
@@ -241,9 +286,19 @@ section h2 {
       margin-bottom: 20px;
   }
 
-  /* На малих екранах робимо 1 колонку */
   .schedule-display {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; /* Одна колонка на малих екранах */
+  }
+
+  .schedule-entry li {
+      flex-direction: column; /* На малих екранах роль і ім'я можуть бути в стовпець */
+      align-items: flex-start;
+  }
+
+  .schedule-entry .role {
+      min-width: unset; /* Прибираємо min-width на малих екранах */
+      margin-right: 0;
+      margin-bottom: 3px; /* Невеликий відступ між роллю та іменем, якщо вони в стовпець */
   }
 }
 
