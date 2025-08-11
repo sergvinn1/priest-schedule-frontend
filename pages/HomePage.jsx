@@ -1,112 +1,105 @@
 // src/pages/HomePage.jsx
-import React, { useState, useEffect } from 'react';
-import DateRangeSelector from '../src/components/DateRangeSelector'; // Скоро створимо
-import ScheduleDisplay from '../src/components/ScheduleDisplay'; // Скоро створимо
-
-// Імітація даних про священників (пізніше буде з БД)
-const priestsData = [
-    { id: 1, name: "протоієрей Віталій Голоскевич" },
-    { id: 2, name: "протоієрей Вячеслав Буданевич" },
-    { id: 3, name: "протоієрей Іоан Дрозд" },
-    { id: 4, name: "протоієрей Василій Коровай" },
-    { id: 5, name: "протоієрей Димитрій Пилинь" },
-    { id: 6, name: "архімандрит Софроній (Чуприна)" }
-];
-
-// Імітація даних про чергування
-const mockScheduleData = [
-    {
-        startDate: '2025-08-11',
-        endDate: '2025-08-17',
-        servingPriestId: 3, // Іоан Дрозд
-        churchDutyPriestId: 1, // Віталій Голоскевич
-        cityDutyPriestId: 6    // Софроній (Чуприна)
-    },
-    {
-        startDate: '2025-08-18',
-        endDate: '2025-08-24',
-        servingPriestId: 4, // Василій Коровай
-        churchDutyPriestId: 2, // Вячеслав Буданевич
-        cityDutyPriestId: 1    // Віталій Голоскевич
-    },
-    {
-        startDate: '2025-08-25', // Дата коректна за вашим зразком, хоча була 15.07
-        endDate: '2025-08-31',
-        servingPriestId: 5, // Димитрій Пилинь
-        churchDutyPriestId: 3, // Іоан Дрозд
-        cityDutyPriestId: 2    // Вячеслав Буданевич
-    },
-    {
-        startDate: '2025-09-01',
-        endDate: '2025-09-07',
-        servingPriestId: 6, // Софроній (Чуприна)
-        churchDutyPriestId: 4, // Василій Коровай
-        cityDutyPriestId: 3    // Іоан Дрозд
-    },
-    {
-        startDate: '2025-09-08',
-        endDate: '2025-09-14',
-        servingPriestId: 1, // Віталій Голоскевич
-        churchDutyPriestId: 5, // Димитрій Пилинь
-        cityDutyPriestId: 4    // Василій Коровай
-    },
-    {
-        startDate: '2025-09-15',
-        endDate: '2025-09-21',
-        servingPriestId: 2, // Вячеслав Буданевич
-        churchDutyPriestId: 6, // Софроній (Чуприна)
-        cityDutyPriestId: 5    // Димитрій Пилинь
-    }
-];
+import React, { useState, useEffect, useCallback } from 'react';
+import DateRangeSelector from '../src/components/DateRangeSelector';
+import ScheduleDisplay from '../src/components/ScheduleDisplay';
 
 function HomePage() {
-  const [currentSchedule, setCurrentSchedule] = useState([]);
-  const [selectedStartDate, setSelectedStartDate] = useState('2025-06-30');
-  const [selectedEndDate, setSelectedEndDate] = useState('2025-08-10');
+  const [priestsData, setPriestsData] = useState([]); // Стан для священників
+  const [currentSchedule, setCurrentSchedule] = useState([]); // Стан для розкладу
+  const [selectedStartDate, setSelectedStartDate] = useState(() => {
+    const today = new Date();
+    // Початкова дата: початок поточного тижня (понеділок)
+    const firstDayOfWeek = new Date(today.setDate(today.getDate() - (today.getDay() + 6) % 7));
+    return firstDayOfWeek.toISOString().split('T')[0];
+  });
+  const [selectedEndDate, setSelectedEndDate] = useState(() => {
+    const today = new Date();
+    // Кінцева дата: кінець поточного тижня (неділя)
+    const lastDayOfWeek = new Date(today.setDate(today.getDate() - (today.getDay() + 6) % 7 + 6));
+    return lastDayOfWeek.toISOString().split('T')[0];
+  });
+  const [isLoading, setIsLoading] = useState(true); // Стан для індикатора завантаження
+  const [error, setError] = useState(null); // Стан для помилок
 
-  // Функція для фільтрації розкладу за діапазоном дат
-  const filterSchedule = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+  // Базовий URL для API (змінна середовища Vite)
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    return mockScheduleData.filter(entry => {
-      const entryStart = new Date(entry.startDate);
-      const entryEnd = new Date(entry.endDate);
+  // Функція для завантаження священників
+  const fetchPriests = useCallback(async () => {
+    setError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/priests`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setPriestsData(data);
+    } catch (err) {
+      console.error("Error fetching priests:", err);
+      setError("Не вдалося завантажити список священників.");
+    }
+  }, [API_BASE_URL]);
 
-      // Перевіряємо, чи є перетин між вибраним діапазоном і діапазоном чергування
-      return (entryStart <= end && entryEnd >= start);
-    });
-  };
+  // Функція для завантаження розкладу
+  const fetchSchedule = useCallback(async (startDate, endDate) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/schedule/range?start=${startDate}&end=${endDate}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCurrentSchedule(data);
+    } catch (err) {
+      console.error("Error fetching schedule:", err);
+      setError("Не вдалося завантажити розклад. Спробуйте пізніше.");
+      setCurrentSchedule([]); // Очищаємо розклад у випадку помилки
+    } finally {
+      setIsLoading(false);
+    }
+  }, [API_BASE_URL]);
 
-  // Викликається при першому рендерингу компонента та при зміні дат
+  // Завантажуємо дані при першому рендерингу компонента
   useEffect(() => {
-    setCurrentSchedule(filterSchedule(selectedStartDate, selectedEndDate));
-  }, [selectedStartDate, selectedEndDate]); // Залежності: функція запускається при зміні цих state
+    fetchPriests();
+    // Викликаємо fetchSchedule з поточними вибраними датами при першому завантаженні
+    fetchSchedule(selectedStartDate, selectedEndDate);
+  }, [fetchPriests, fetchSchedule, selectedStartDate, selectedEndDate]); // Залежності useEffect
 
   // Обробник зміни дат з компонента DateRangeSelector
-  const handleDateRangeChange = (dates) => {
-    setSelectedStartDate(dates.startDate);
-    setSelectedEndDate(dates.endDate);
+  const handleDateRangeChange = ({ startDate, endDate }) => {
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
+    fetchSchedule(startDate, endDate); // Завантажуємо новий розклад при зміні дат
   };
 
   // Допоміжна функція для отримання імені священника за ID
   const getPriestNameById = (id) => {
-    const priest = priestsData.find(p => p.id === id);
-    return priest ? priest.name : "Невідомий священник";
+    const priest = priestsData.find(p => p._id === id); // _id з MongoDB
+    return priest ? priest.name : "Невідомий Священник";
   };
 
   return (
     <section id="schedule" className="schedule-section">
-      <h2>Розклад чергувань</h2>
+      <h2>Поточний Розклад Чергувань</h2>
       <DateRangeSelector
         startDate={selectedStartDate}
         endDate={selectedEndDate}
         onDateRangeChange={handleDateRangeChange}
       />
-      <ScheduleDisplay
-        schedule={currentSchedule}
-        getPriestNameById={getPriestNameById}
-      />
+
+      {error && <div className="error-message">Помилка: {error}</div>}
+      {isLoading ? (
+        <div className="schedule-display">
+          <p className="loading-message">Завантаження розкладу...</p>
+        </div>
+      ) : (
+        <ScheduleDisplay
+          schedule={currentSchedule}
+          getPriestNameById={getPriestNameById}
+        />
+      )}
     </section>
   );
 }
