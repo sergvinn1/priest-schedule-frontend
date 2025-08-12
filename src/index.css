@@ -2,312 +2,553 @@
 
 /* Базові стилі для всього документа */
 body {
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #eef2f6;
-  color: #334e68;
-  line-height: 1.6;
-  scroll-behavior: smooth;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #eef2f6; /* Світло-сірий фон */
+    color: #334e68; /* Темний текст */
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased; /* Згладжування шрифтів для кращої читабельності */
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* **Важливо: запобігає горизонтальному скролу на рівні body** */
 }
 
 /* Загальний контейнер для центрування та обмеження ширини */
-/* Збільшив max-width, щоб точно було місце для 3-х колонок по 300px + gap */
 .container {
-  max-width: 1400px; /* Збільшено для кращого розміщення 3-х колонок */
-  margin: 0 auto;
-  padding: 0 20px;
+    max-width: 1400px; /* Достатньо для 3-х колонок */
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
 /* Header */
 .main-header {
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  padding: 20px 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #2c3e50; /* Темно-синій */
+    color: #ecf0f1; /* Світлий текст */
+    padding: 20px 0;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); /* Більш виразна тінь */
 }
 
 .main-header h1 {
-  margin: 0;
-  font-size: 2.2em;
-  text-align: center;
-  letter-spacing: 1px;
+    margin: 0;
+    font-size: 2.2em;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 600; /* Трохи жирніший шрифт */
 }
 
 /* Навігація */
 .main-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 15px 0 0 0;
-  display: flex; /* Flexbox для горизонтального меню */
-  justify-content: center;
-  gap: 30px; /* Відстань між пунктами меню */
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 }
 
 .main-nav a {
-  color: #ecf0f1;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1em;
-  transition: color 0.3s ease;
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: 500; /* Середня жирність */
+    font-size: 1.1em;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 5px 10px; /* Додано паддінг для зручнішої клікабельності */
+    border-radius: 4px;
 }
 
-.main-nav a:hover,
+.main-nav a:hover {
+    color: #1abc9c; /* Яскраво-зелений при наведенні */
+    transform: translateY(-2px); /* Легкий підйом при наведенні */
+}
+
 .main-nav a.active { /* Стиль для активного посилання React Router */
-  color: #1abc9c; /* Яскраво-зелений при наведенні */
+    color: #1abc9c;
+    background-color: rgba(26, 188, 156, 0.1); /* Легкий фон для активної вкладки */
+    border-bottom: 2px solid #1abc9c; /* Підкреслення активної вкладки */
+    padding-bottom: 3px; /* Компенсація для підкреслення */
 }
 
-/* Main Content */
+/* Main Content Section */
 section {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 30px;
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
 section h2 {
-  color: #2c3e50;
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 30px;
-  font-size: 2em;
-  border-bottom: 2px solid #eef2f6;
-  padding-bottom: 15px;
+    color: #2c3e50;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 2em;
+    border-bottom: 2px solid #eef2f6;
+    padding-bottom: 15px;
+    font-weight: 600;
 }
 
-/* Селектор діапазону дат */
+/* Date Range Selector & Filter */
 .date-range-selector {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #f8fbfc;
-  border-radius: 8px;
-  border: 1px solid #e0e6ed;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8fbfc;
+    border-radius: 8px;
+    border: 1px solid #e0e6ed;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Внутрішня тінь */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
 .date-range-selector label {
-  font-weight: bold;
-  color: #334e68;
+    font-weight: bold;
+    color: #334e68;
+    white-space: nowrap; /* Запобігає переносу тексту мітки */
 }
 
-.date-range-selector input[type="date"] {
-  padding: 10px 15px;
-  border: 1px solid #c9d6df;
-  border-radius: 5px;
-  font-size: 1em;
-  color: #334e68;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
+.date-range-selector input[type="date"],
+.date-range-selector select { /* Об'єднано стилі для input[date] та select */
+    padding: 10px 15px;
+    border: 1px solid #c9d6df;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #334e68;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff; /* Забезпечення білого фону */
+    min-width: 180px; /* Мінімальна ширина для input/select */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
-.date-range-selector input[type="date"]:focus {
-  outline: none;
-  border-color: #1abc9c;
-  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+.date-range-selector input[type="date"]:focus,
+.date-range-selector select:focus {
+    outline: none;
+    border-color: #1abc9c;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
 }
 
 .date-range-selector button {
-  background-color: #1abc9c;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 150px; /* Мінімальна ширина для кнопки */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
 .date-range-selector button:hover {
-  background-color: #16a085;
-  transform: translateY(-2px);
+    background-color: #16a085;
+    transform: translateY(-2px);
 }
 
 .date-range-selector button:active {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
-/* Відображення розкладу */
+/* Schedule Display */
 .schedule-display {
-  min-height: 150px;
-  display: grid; /* Використовуємо CSS Grid */
-  /* Базові налаштування: 1 колонка. Буде перевизначено медіа-запитами */
-  grid-template-columns: 1fr;
-  gap: 20px; /* Відступ між картками */
-  padding: 20px; /* Додайте внутрішній відступ */
-  border: 1px dashed #c9d6df;
-  border-radius: 8px;
-  color: #667e98;
-  /* justify-content: center;  Це не зовсім те, що потрібно для центровки рядів */
-  align-items: start; /* Вирівнюємо елементи по верху, щоб картки не розтягувались */
-  
-  /* Нове правило для центровки рядів з меншою кількістю елементів */
-  /* justify-items: center;  Це центрирує кожен елемент всередині своєї клітинки */
-  /* place-items: center; Це скорочення для align-items і justify-items */
-  
-  /* Щоб центр елементів в рядку, коли їх менше ніж колонок, краще використовувати: */
-  /* Ця властивість керує вирівнюванням цілої сітки всередині її контейнера */
-  justify-content: center; /* Центрує весь вміст по горизонталі */
-  
+    min-height: 250px; /* Збільшено min-height для порожнього стану та кращого центрування повідомлення */
+    padding: 20px; /* Внутрішній відступ контейнера */
+    border: 1px dashed #c9d6df;
+    border-radius: 8px;
+    background-color: #fcfdff; /* Дуже світлий фон для самого відображення розкладу */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
+
+    /* Завжди використовуємо Flexbox для базового вирівнювання, якщо немає Grid-контенту */
+    display: flex;
+    flex-wrap: wrap; /* Дозволяє елементам переноситися */
+    justify-content: center; /* Центрує елементи по горизонталі */
+    align-items: center; /* Центрує елементи по вертикалі */
+    align-content: center; /* Центрує лінії вмісту по вертикалі (для flex-wrap) */
 }
 
-/* Скидаємо flexbox властивості для повідомлення, якщо воно одне */
-.schedule-display p.loading-message,
-.schedule-display p.no-schedule {
-  grid-column: 1 / -1; /* Займає всю ширину сітки */
-  text-align: center;
-  align-self: center; /* Центруємо по вертикалі */
-  margin: 0; /* Прибираємо зайві відступи */
-  display: block; /* Забезпечуємо відображення як блочний елемент */
-  padding: 20px; /* Додайте внутрішній відступ */
-  color: #555; /* Трохи темніший колір для тексту повідомлення */
-  font-style: italic;
+/* Стилі для повідомлень про завантаження/відсутність/помилки в .schedule-display */
+.schedule-display .loading-message,
+.schedule-display .no-schedule,
+.schedule-display .error-message {
+    flex-basis: 100%; /* Займає всю ширину в flex-контейнері */
+    text-align: center;
+    color: #667e98; /* Стандартний колір для повідомлень */
+    font-size: 1.2em; /* Трохи більший розмір шрифту */
+    font-weight: 500;
+    padding: 30px 20px; /* Збільшений паддінг для кращого вигляду */
+    margin: 0; /* Прибираємо зовнішні відступи */
+
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e6ed;
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
+}
+
+.schedule-display .loading-message {
+    color: #555;
+    animation: pulse 1.5s infinite alternate; /* Додано легку анімацію завантаження */
+}
+
+@keyframes pulse {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+.schedule-display .error-message {
+    color: #d32f2f;
+    background-color: #ffe0e0;
+    border: 1px solid #d32f2f;
+}
+
+/* **НОВЕ: Якщо є картки, змінюємо режим на grid** */
+.schedule-display.has-entries { /* Клас додаватиметься в React, якщо є записи */
+    display: grid;
+    grid-template-columns: 1fr; /* За замовчуванням 1 колонка, буде змінено медіа-запитами */
+    gap: 20px; /* Забезпечує однакові відступи між картками по горизонталі та вертикалі */
+    align-items: stretch; /* **Вирівнює елементи сітки по висоті, щоб вони займали всю доступну висоту комірки** */
+    align-content: start; /* Щоб вміст не центрувався, якщо рядків менше, ніж потрібно */
+    justify-content: start; /* Щоб вміст не центрувався, якщо колонок менше, ніж потрібно */
 }
 
 .schedule-entry {
-  background-color: #f8fbfc;
-  border: 1px solid #e0e6ed;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Збільшено тіні для акценту */
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Додано тіні до transition */
-  display: flex; /* Використовуємо flexbox для внутрішнього вмісту картки */
-  flex-direction: column; /* Елементи стовпцем */
-  justify-content: space-between; /* Розтягує вміст по висоті */
-  height: 100%; /* Забезпечує однакову висоту карткам, якщо їх декілька у рядку grid-контейнера */
-  margin-bottom: 20px; /* Додано відступ знизу для візуального розділення рядів */
+    background-color: #ffffff; /* Білий фон картки */
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column; /* Зробити контент колонкою */
+    justify-content: space-between; /* Розподілити вміст по вертикалі */
+    height: auto; /* **Змінено: дозволяємо висоті адаптуватися, `align-items: stretch` в батьківському Grid подбає про вирівнювання** */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
 }
 
 .schedule-entry:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Більш виразна тінь при наведенні */
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); /* Більш виразна тінь */
 }
 
 .schedule-entry h3 {
-  color: #2c3e50;
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.5em;
-  border-bottom: 1px solid #eef2f6;
-  padding-bottom: 10px;
-  text-align: center; /* Центруємо дату */
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 1px solid #eef2f6;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
 }
 
 .schedule-entry ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1; /* Дозволяє списку займати весь доступний простір */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Дозволяє списку займати весь доступний простір, штовхаючи футер вниз */
 }
 
 .schedule-entry li {
-  margin-bottom: 10px; /* Збільшено відступ між пунктами */
-  font-size: 1.05em;
-  color: #334e68;
-  display: flex; /* Розділяє роль і ім'я на одну лінію, але вирівнює їх */
-  align-items: baseline; /* Вирівнювання по базовій лінії тексту */
-  flex-wrap: wrap; /* Дозволяє переносити на новий рядок, якщо не вистачає місця */
+    margin-bottom: 10px;
+    font-size: 1.05em;
+    color: #334e68;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
 }
 
 .schedule-entry li:last-child {
-  margin-bottom: 0; /* Прибираємо нижній відступ для останнього елемента */
+    margin-bottom: 0;
 }
 
 .schedule-entry .role {
-  font-weight: bold;
-  color: #1abc9c;
-  min-width: 120px; /* Зменшено min-width, щоб більше поміщалося */
-  display: inline-block; /* Потрібно для min-width */
-  margin-right: 5px; /* Невеликий відступ від ролі до імені */
+    font-weight: bold;
+    color: #1abc9c;
+    min-width: 120px;
+    display: inline-block;
+    margin-right: 8px; /* Збільшено відступ */
+    text-align: right; /* Вирівняно текст ролі по правому краю */
 }
 
 /* Footer */
 .main-footer {
-  background-color: #334e68;
-  color: #c9d6df;
-  padding: 20px 0;
-  text-align: center;
-  font-size: 0.9em;
+    background-color: #334e68;
+    color: #c9d6df;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9em;
+    margin-top: 50px; /* Додано відступ зверху */
 }
 
 .main-footer p {
-  margin: 5px 0;
+    margin: 5px 0;
+}
+
+/* АДМІН-ПАНЕЛЬ СТИЛІ */
+
+.admin-section {
+    padding: 30px;
+}
+
+.admin-form-container {
+    background-color: #f8fbfc;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-form-container h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.schedule-form .form-group {
+    margin-bottom: 18px; /* Трохи більший відступ */
+}
+
+.schedule-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #334e68;
+}
+
+.schedule-form input[type="text"], /* Додано стилі для текстових полів (для імен священників) */
+.schedule-form input[type="date"],
+.schedule-form select {
+    width: 100%; /* Займає всю доступну ширину */
+    padding: 10px;
+    border: 1px solid #c9d6df;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #334e68;
+    background-color: #ffffff;
+    box-sizing: border-box; /* Важливо для розрахунку ширини з паддінгом */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-form input[type="text"]:focus,
+.schedule-form input[type="date"]:focus,
+.schedule-form select:focus {
+    outline: none;
+    border-color: #1abc9c;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+}
+
+.schedule-form button {
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.schedule-form button:hover {
+    background-color: #16a085;
+    transform: translateY(-2px);
+}
+
+.schedule-form button:active {
+    transform: translateY(0);
+}
+
+.schedule-form button:last-child {
+    margin-right: 0;
+}
+
+/* Стилі для списку існуючих записів розкладу та священників */
+.schedule-list { /* Використовується як для розкладу, так і для священників на адмінці */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; /* Однакові відступи між елементами списку */
+    padding: 0;
+    margin-top: 20px; /* Невеликий відступ зверху */
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
+}
+
+.schedule-item { /* Використовується як для розкладу, так і для священників на адмінці */
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* **Додано: включає padding у ширину** */
+}
+
+.schedule-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.schedule-item p {
+    margin: 5px 0;
+    color: #334e68;
+}
+
+.schedule-item p strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.schedule-item .item-actions {
+    margin-top: 20px; /* Збільшено відступ */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.schedule-item .edit-button,
+.schedule-item .delete-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.schedule-item .edit-button {
+    background-color: #2196f3; /* Синій для редагування */
+    color: white;
+}
+
+.schedule-item .edit-button:hover {
+    background-color: #1976d2;
+    transform: translateY(-1px);
+}
+
+.schedule-item .delete-button {
+    background-color: #f44336; /* Червоний для видалення */
+    color: white;
+}
+
+.schedule-item .delete-button:hover {
+    background-color: #d32f2f;
+    transform: translateY(-1px);
 }
 
 /* Медіа-запити для адаптивності */
 
 /* Десктопні екрани (більше 1200px): 3 колонки */
 @media (min-width: 1200px) {
-  .schedule-display {
-      grid-template-columns: repeat(3, 1fr);
-  }
+    /* Застосовуємо grid, тільки якщо є записи */
+    .schedule-display.has-entries {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* Планшети (від 769px до 1199px): 2 колонки */
 @media (min-width: 769px) and (max-width: 1199px) {
-  .schedule-display {
-      grid-template-columns: repeat(2, 1fr);
-  }
+    /* Застосовуємо grid, тільки якщо є записи */
+    .schedule-display.has-entries {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Мобільні пристрої (до 768px): 1 колонка */
 @media (max-width: 768px) {
-  .main-header h1 {
-      font-size: 1.8em;
-  }
+    .main-header h1 {
+        font-size: 1.8em;
+    }
 
-  .main-nav ul {
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-  }
+    .main-nav ul {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
 
-  .date-range-selector {
-      flex-direction: column;
-      gap: 10px;
-  }
+    .main-nav a {
+        padding: 8px 15px; /* Більший паддінг для мобільних кнопок */
+        text-align: center;
+    }
 
-  .date-range-selector label,
-  .date-range-selector input,
-  .date-range-selector button {
-      width: 100%;
-  }
+    .date-range-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-  section {
-      padding: 20px;
-  }
+    .date-range-selector label,
+    .date-range-selector input,
+    .date-range-selector select,
+    .date-range-selector button {
+        width: 100%; /* Повна ширина на мобільних */
+        box-sizing: border-box; /* Важливо для паддінгів */
+    }
 
-  section h2 {
-      font-size: 1.7em;
-      margin-bottom: 20px;
-  }
+    section {
+        padding: 20px;
+    }
 
-  .schedule-display {
-      grid-template-columns: 1fr; /* Одна колонка на малих екранах */
-  }
+    section h2 {
+        font-size: 1.7em;
+        margin-bottom: 20px;
+    }
 
-  .schedule-entry li {
-      flex-direction: column; /* На малих екранах роль і ім'я можуть бути в стовпець */
-      align-items: flex-start;
-  }
+    .schedule-display {
+        grid-template-columns: 1fr; /* Навіть якщо це grid, одна колонка на мобільних */
+        padding: 15px; /* Менший паддінг на мобільних */
+    }
 
-  .schedule-entry .role {
-      min-width: unset; /* Прибираємо min-width на малих екранах */
-      margin-right: 0;
-      margin-bottom: 3px; /* Невеликий відступ між роллю та іменем, якщо вони в стовпець */
-  }
+    .schedule-entry li {
+        flex-direction: column; /* Роль і ім'я в стовпець */
+        align-items: flex-start;
+    }
+
+    .schedule-entry .role {
+        min-width: unset; /* Прибираємо min-width на малих екранах */
+        margin-right: 0;
+        margin-bottom: 3px;
+        text-align: left; /* Вирівняно з ім'ям */
+    }
+
+    .schedule-item .item-actions {
+        flex-direction: column; /* Кнопки дій в стовпець */
+        gap: 8px;
+        align-items: stretch; /* Розтягуємо кнопки на всю ширину */
+    }
+
+    .schedule-item .edit-button,
+    .schedule-item .delete-button {
+        width: 100%; /* Кнопки на всю ширину */
+    }
 }
 
 @media (max-width: 480px) {
-  .main-header h1 {
-      font-size: 1.5em;
-  }
+    .main-header h1 {
+        font-size: 1.5em;
+    }
 
-  .container {
-      padding: 0 15px;
-  }
+    .container {
+        padding: 0 15px;
+    }
+
+    .schedule-form button {
+        width: 100%; /* Кнопки форми також на всю ширину */
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .schedule-form button:last-child {
+        margin-bottom: 0;
+    }
 }

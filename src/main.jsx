@@ -1,7 +1,7 @@
 // src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '../src/App';
+import App from './App'; // Імпортуємо наш головний компонент App    
 import './index.css'; // Підключаємо наші глобальні стилі
 import { BrowserRouter } from 'react-router-dom'; // Імпортуємо BrowserRouter
 

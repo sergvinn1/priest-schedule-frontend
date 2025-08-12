@@ -1,15 +1,39 @@
 // src/components/ScheduleDisplay.jsx
-
 import React from 'react';
 
-function ScheduleDisplay({ schedule }) {
-  if (!schedule || schedule.length === 0) {
-    return <p className="no-schedule">На обраний діапазон дат розкладу немає.</p>;
+function ScheduleDisplay({ schedule, loading, error }) {
+  // Визначаємо, чи є записи розкладу, щоб додати клас
+  const hasEntries = schedule && schedule.length > 0;
+
+  // Визначаємо динамічні класи для schedule-display
+  const scheduleDisplayClasses = `schedule-display ${hasEntries ? 'has-entries' : ''}`;
+
+  if (loading) {
+    return (
+      <div className={scheduleDisplayClasses}>
+        <p className="loading-message">Завантаження розкладу...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={scheduleDisplayClasses}>
+        <p className="error-message">Помилка: {error.message || 'Невідома помилка при завантаженні розкладу.'}</p>
+      </div>
+    );
+  }
+
+  if (!hasEntries) {
+    return (
+      <div className={scheduleDisplayClasses}>
+        <p className="no-schedule">На обраний діапазон дат розкладу немає.</p>
+      </div>
+    );
   }
 
   return (
-    // Змінено className на "schedule-display"
-    <div className="schedule-display">
+    <div className={scheduleDisplayClasses}>
       {schedule.map(entry => (
         <div key={entry._id} className="schedule-entry">
           <h3>
@@ -18,7 +42,6 @@ function ScheduleDisplay({ schedule }) {
             {new Date(entry.endDate).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' })}
           </h3>
 
-          {/* Використовуємо ul/li для списку ролей та імен */}
           <ul>
             <li>
               <span className="role">Служащий:</span>
